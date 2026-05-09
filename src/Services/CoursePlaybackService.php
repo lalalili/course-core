@@ -3,8 +3,10 @@
 namespace Lalalili\CourseCore\Services;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Collection;
 use Lalalili\CourseCore\Contracts\CourseAccessResolver;
+use Lalalili\CourseCore\Exceptions\CourseConfigurationException;
 
 class CoursePlaybackService
 {
@@ -17,8 +19,10 @@ class CoursePlaybackService
      * @param  Collection<int, Model>  $chapters
      * @param  Collection<int, Model>  $histories
      */
-    public function initializeUnit(Model $course, Collection $chapters, Collection $histories): ?Model
+    public function initializeUnit(Model $course, Collection $chapters, Collection $histories, ?Authenticatable $user = null): ?Model
     {
+        $user ??= auth()->user();
+
         /** @var Collection<int, Model> $units */
         $units = $chapters->flatMap(fn (Model $chapter): Collection => $chapter->getRelationValue('units') ?? collect());
 
@@ -28,15 +32,15 @@ class CoursePlaybackService
         }
 
         $incompleteUnit = $this->findFirstIncompleteUnit($units, $histories);
-        if ($incompleteUnit instanceof Model && $this->accessResolver->canAccessUnit(auth()->user(), $course, $incompleteUnit)) {
-            $this->firstOrCreateCourseHistory($incompleteUnit);
+        if ($incompleteUnit instanceof Model && $this->accessResolver->canAccessUnit($user, $course, $incompleteUnit)) {
+            $this->firstOrCreateCourseHistory($incompleteUnit, $user);
 
             return $incompleteUnit;
         }
 
         $nextUnit = $this->findNextUnwatchedUnit($units, $histories);
-        if ($nextUnit instanceof Model && $this->accessResolver->canAccessUnit(auth()->user(), $course, $nextUnit)) {
-            $this->firstOrCreateCourseHistory($nextUnit);
+        if ($nextUnit instanceof Model && $this->accessResolver->canAccessUnit($user, $course, $nextUnit)) {
+            $this->firstOrCreateCourseHistory($nextUnit, $user);
 
             return $nextUnit;
         }
@@ -51,7 +55,7 @@ class CoursePlaybackService
      */
     protected function findFreeUnit(Collection $units): ?Model
     {
-        return $units->first(fn (Model $unit): bool => (bool) data_get($unit, 'isFree', false));
+        return $units->first(fn (Model $unit): bool => (bool) (data_get($unit, 'isFree') ?? data_get($unit, 'is_free', false)));
     }
 
     /**
@@ -82,17 +86,21 @@ class CoursePlaybackService
         return null;
     }
 
-    protected function firstOrCreateCourseHistory(Model $unit): void
+    protected function firstOrCreateCourseHistory(Model $unit, ?Authenticatable $user): void
     {
+        if (! $user) {
+            return;
+        }
+
         $historyModel = config('course-core.models.history');
 
         if (! is_string($historyModel) || ! class_exists($historyModel)) {
-            return;
+            throw CourseConfigurationException::missingModel('history');
         }
 
         $historyModel::query()->firstOrCreate(
             [
-                'user_id'    => auth()->id(),
+                'user_id'    => $user->getAuthIdentifier(),
                 'course_id'  => data_get($unit, 'course_id'),
                 'chapter_id' => data_get($unit, 'parent_id'),
                 'unit_id'    => $unit->getKey(),

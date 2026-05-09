@@ -6,6 +6,7 @@ use Lalalili\CourseCore\Contracts\CourseAccessResolver;
 use Lalalili\CourseCore\Contracts\CourseProductResolver;
 use Lalalili\CourseCore\Contracts\CourseTenantResolver;
 use Lalalili\CourseCore\Contracts\CourseVideoProvider;
+use Lalalili\CourseCore\Commands\InstallCourseCoreCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -15,7 +16,8 @@ class CourseCoreServiceProvider extends PackageServiceProvider
     {
         $package
             ->name('course-core')
-            ->hasConfigFile('course-core');
+            ->hasConfigFile('course-core')
+            ->hasCommand(InstallCourseCoreCommand::class);
     }
 
     public function registeringPackage(): void

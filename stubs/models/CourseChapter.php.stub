@@ -1,0 +1,43 @@
+<?php
+
+namespace {{ namespace }};
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+class CourseChapter extends Model
+{
+    protected $fillable = [
+        'course_id',
+        'parent_id',
+        'title',
+        'video_url',
+        'duration',
+        'is_free',
+        'sort',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'duration' => 'integer',
+            'is_free' => 'boolean',
+        ];
+    }
+
+    public function course(): BelongsTo
+    {
+        return $this->belongsTo(Course::class);
+    }
+
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(self::class, 'parent_id');
+    }
+
+    public function units(): HasMany
+    {
+        return $this->hasMany(self::class, 'parent_id')->orderBy('sort');
+    }
+}

@@ -6,7 +6,6 @@ use Exception;
 use Illuminate\Support\Str;
 use Lalalili\CourseCore\Contracts\CourseVideoProvider;
 use Lalalili\CourseCore\Data\CourseVideoDetails;
-use Vimeo\Laravel\Facades\Vimeo;
 
 class VimeoCourseVideoProvider implements CourseVideoProvider
 {
@@ -29,8 +28,14 @@ class VimeoCourseVideoProvider implements CourseVideoProvider
 
     public function getVideoDetails(string $videoId): ?CourseVideoDetails
     {
+        if (! class_exists(\Vimeo\Laravel\Facades\Vimeo::class)) {
+            logger()->warning('Vimeo provider is configured, but vimeo/laravel is not installed.');
+
+            return null;
+        }
+
         try {
-            $video = Vimeo::request("/videos/{$videoId}", [], 'GET');
+            $video = \Vimeo\Laravel\Facades\Vimeo::request("/videos/{$videoId}", [], 'GET');
 
             if ($video['status'] === 200 && ! empty($video['body']['duration']) && ! empty($video['body']['player_embed_url'])) {
                 return new CourseVideoDetails(
@@ -39,7 +44,10 @@ class VimeoCourseVideoProvider implements CourseVideoProvider
                 );
             }
         } catch (Exception $exception) {
-            logger()->error("Vimeo API Error: {$exception->getMessage()}");
+            logger()->error('Vimeo API request failed.', [
+                'exception' => $exception::class,
+                'message'   => $exception->getMessage(),
+            ]);
         }
 
         return null;

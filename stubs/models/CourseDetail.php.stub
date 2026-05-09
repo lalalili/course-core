@@ -1,0 +1,28 @@
+<?php
+
+namespace {{ namespace }};
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+class CourseDetail extends Model
+{
+    protected $fillable = [
+        'course_id',
+        'summary',
+        'content',
+        'faq',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'faq' => 'array',
+        ];
+    }
+
+    public function course(): BelongsTo
+    {
+        return $this->belongsTo(Course::class);
+    }
+}

@@ -1,0 +1,51 @@
+<?php
+
+namespace {{ namespace }};
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+
+class Course extends Model
+{
+    protected $fillable = [
+        'course_category_id',
+        'title',
+        'slug',
+        'description',
+        'status',
+        'is_free',
+        'price',
+        'published_at',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'is_free' => 'boolean',
+            'price' => 'integer',
+            'published_at' => 'datetime',
+        ];
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(CourseCategory::class, 'course_category_id');
+    }
+
+    public function detail(): HasOne
+    {
+        return $this->hasOne(CourseDetail::class);
+    }
+
+    public function chapters(): HasMany
+    {
+        return $this->hasMany(CourseChapter::class)->whereNull('parent_id')->orderBy('sort');
+    }
+
+    public function histories(): HasMany
+    {
+        return $this->hasMany(CourseHistory::class);
+    }
+}

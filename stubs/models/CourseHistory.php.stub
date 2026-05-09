@@ -1,0 +1,43 @@
+<?php
+
+namespace {{ namespace }};
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+class CourseHistory extends Model
+{
+    protected $fillable = [
+        'user_id',
+        'course_id',
+        'chapter_id',
+        'unit_id',
+        'progress',
+        'last_watched_at',
+        'completed',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'progress' => 'integer',
+            'last_watched_at' => 'datetime',
+            'completed' => 'boolean',
+        ];
+    }
+
+    public function course(): BelongsTo
+    {
+        return $this->belongsTo(Course::class);
+    }
+
+    public function chapter(): BelongsTo
+    {
+        return $this->belongsTo(CourseChapter::class, 'chapter_id');
+    }
+
+    public function unit(): BelongsTo
+    {
+        return $this->belongsTo(CourseChapter::class, 'unit_id');
+    }
+}

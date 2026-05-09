@@ -14,5 +14,5 @@ return [
     'access_resolver'  => Lalalili\CourseCore\Support\NullCourseAccessResolver::class,
     'tenant_resolver'  => Lalalili\CourseCore\Support\NullCourseTenantResolver::class,
     'product_resolver' => Lalalili\CourseCore\Support\NullCourseProductResolver::class,
-    'video_provider'   => Lalalili\CourseCore\Support\VimeoCourseVideoProvider::class,
+    'video_provider'   => Lalalili\CourseCore\Support\NullCourseVideoProvider::class,
 ];

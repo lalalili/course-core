@@ -10,7 +10,7 @@ class NullCourseAccessResolver implements CourseAccessResolver
 {
     public function canViewCourse(?Authenticatable $user, Model $course): bool
     {
-        return true;
+        return false;
     }
 
     public function canAccessUnit(?Authenticatable $user, Model $course, Model $unit): bool

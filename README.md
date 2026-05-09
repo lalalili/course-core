@@ -6,8 +6,9 @@ Reusable online course domain layer for Laravel applications.
 
 - Course access, tenant, product, and video provider contracts.
 - Configurable model class names for host applications.
-- Vimeo-backed default video provider.
+- Safe null video provider by default, with optional Vimeo provider support.
 - Playback unit initialization service that can be reused across projects.
+- Install command with model and migration stubs for new applications.
 
 ## Installation
 
@@ -36,6 +37,12 @@ Publish and customize the configuration in the host application:
 php artisan vendor:publish --tag=course-core-config
 ```
 
+For a new application, publish the starter files:
+
+```bash
+php artisan course-core:install
+```
+
 At minimum, configure the host model classes and resolver implementations:
 
 ```php
@@ -51,9 +58,11 @@ return [
     'access_resolver' => App\Services\Courses\CourseAccessResolver::class,
     'tenant_resolver' => App\Services\Courses\CourseTenantResolver::class,
     'product_resolver' => App\Services\Courses\CourseProductResolver::class,
-    'video_provider' => Lalalili\CourseCore\Support\VimeoCourseVideoProvider::class,
+    'video_provider' => Lalalili\CourseCore\Support\NullCourseVideoProvider::class,
 ];
 ```
+
+Install `vimeo/laravel` and set `video_provider` to `VimeoCourseVideoProvider::class` only when the host app uses Vimeo.
 
 ## Contracts
 
@@ -63,3 +72,11 @@ return [
 - `CourseVideoProvider`
 
 Each host application owns its commerce, tenant, and permission rules by binding these contracts through config.
+
+## Releases
+
+Use tagged versions in host applications:
+
+```bash
+composer require lalalili/course-core:^0.1
+```
