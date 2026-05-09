@@ -17,6 +17,19 @@ Require the package through Composer:
 composer require lalalili/course-core
 ```
 
+When installing directly from GitHub before a Packagist release, add the VCS repository to the host application's `composer.json`:
+
+```json
+{
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/lalalili/course-core.git"
+        }
+    ]
+}
+```
+
 Publish and customize the configuration in the host application:
 
 ```bash
