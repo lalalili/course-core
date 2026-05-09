@@ -2,11 +2,13 @@
 
 namespace Lalalili\CourseCore;
 
+use Lalalili\CourseCore\Commands\InstallCourseCoreCommand;
 use Lalalili\CourseCore\Contracts\CourseAccessResolver;
 use Lalalili\CourseCore\Contracts\CourseProductResolver;
 use Lalalili\CourseCore\Contracts\CourseTenantResolver;
+use Lalalili\CourseCore\Contracts\CourseVideoPlatformManager;
 use Lalalili\CourseCore\Contracts\CourseVideoProvider;
-use Lalalili\CourseCore\Commands\InstallCourseCoreCommand;
+use Lalalili\CourseCore\Support\ConfigCourseVideoPlatformManager;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -25,6 +27,7 @@ class CourseCoreServiceProvider extends PackageServiceProvider
         $this->app->bind(CourseAccessResolver::class, fn ($app) => $app->make(config('course-core.access_resolver')));
         $this->app->bind(CourseTenantResolver::class, fn ($app) => $app->make(config('course-core.tenant_resolver')));
         $this->app->bind(CourseProductResolver::class, fn ($app) => $app->make(config('course-core.product_resolver')));
+        $this->app->singleton(CourseVideoPlatformManager::class, ConfigCourseVideoPlatformManager::class);
         $this->app->bind(CourseVideoProvider::class, fn ($app) => $app->make(config('course-core.video_provider')));
     }
 }
