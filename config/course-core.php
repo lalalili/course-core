@@ -10,23 +10,23 @@ use Lalalili\CourseCore\Support\VimeoCourseVideoProvider;
 
 return [
     'models' => [
-        'course' => null,
+        'course'   => null,
         'category' => null,
-        'chapter' => null,
-        'detail' => null,
-        'history' => null,
+        'chapter'  => null,
+        'detail'   => null,
+        'history'  => null,
     ],
 
     'coming_days' => env('COURSE_COMING_DAYS', 30),
 
-    'access_resolver' => NullCourseAccessResolver::class,
-    'tenant_resolver' => NullCourseTenantResolver::class,
+    'access_resolver'  => NullCourseAccessResolver::class,
+    'tenant_resolver'  => NullCourseTenantResolver::class,
     'product_resolver' => NullCourseProductResolver::class,
-    'video_provider' => ConfiguredCourseVideoProvider::class,
+    'video_provider'   => ConfiguredCourseVideoProvider::class,
 
     'default_video_platform' => env('COURSE_VIDEO_PLATFORM', 'vimeo'),
 
-    'video_upload_strategy' => env('COURSE_VIDEO_UPLOAD_STRATEGY', 's3_then_import'),
+    'video_upload_strategy' => env('COURSE_VIDEO_UPLOAD_STRATEGY', 's3_multipart_then_import'),
 
     'video_staging_disk' => env('COURSE_VIDEO_STAGING_DISK', 's3'),
 
@@ -37,15 +37,15 @@ return [
     'video_cleanup_staging_after_import' => env('COURSE_VIDEO_CLEANUP_STAGING_AFTER_IMPORT', true),
 
     'video_platforms' => [
-        'vimeo' => VimeoCourseVideoProvider::class,
+        'vimeo'             => VimeoCourseVideoProvider::class,
         'cloudflare_stream' => CloudflareStreamVideoProvider::class,
-        'vdocipher' => VdoCipherVideoProvider::class,
+        'vdocipher'         => VdoCipherVideoProvider::class,
     ],
 
     'providers' => [
         'cloudflare_stream' => [
-            'account_id' => env('CLOUDFLARE_STREAM_ACCOUNT_ID'),
-            'api_token' => env('CLOUDFLARE_STREAM_API_TOKEN'),
+            'account_id'         => env('CLOUDFLARE_STREAM_ACCOUNT_ID'),
+            'api_token'          => env('CLOUDFLARE_STREAM_API_TOKEN'),
             'customer_subdomain' => env('CLOUDFLARE_STREAM_CUSTOMER_SUBDOMAIN'),
         ],
         'vdocipher' => [

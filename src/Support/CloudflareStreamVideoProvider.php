@@ -65,8 +65,8 @@ class CloudflareStreamVideoProvider implements CourseVideoPlatform
             ->asJson()
             ->post($this->endpoint('stream/direct_upload'), [
                 'maxDurationSeconds' => $request->metadata['max_duration_seconds'] ?? null,
-                'meta' => array_filter([
-                    'name' => $request->title ?? pathinfo($request->fileName, PATHINFO_FILENAME),
+                'meta'               => array_filter([
+                    'name'        => $request->title ?? pathinfo($request->fileName, PATHINFO_FILENAME),
                     'description' => $request->description,
                 ]),
             ])
@@ -87,9 +87,9 @@ class CloudflareStreamVideoProvider implements CourseVideoPlatform
         $response = $this->client()
             ->asJson()
             ->post($this->endpoint('stream/copy'), [
-                'url' => $request->sourceUrl,
+                'url'  => $request->sourceUrl,
                 'meta' => array_filter([
-                    'name' => $request->title,
+                    'name'        => $request->title,
                     'description' => $request->description,
                 ]),
             ])
@@ -137,7 +137,7 @@ class CloudflareStreamVideoProvider implements CourseVideoPlatform
             ->asJson()
             ->post($this->endpoint("stream/{$providerVideoId}"), [
                 'meta' => array_filter([
-                    'name' => $properties['name'] ?? $properties['title'] ?? null,
+                    'name'        => $properties['name'] ?? $properties['title'] ?? null,
                     'description' => $properties['description'] ?? null,
                 ]),
             ])

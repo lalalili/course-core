@@ -8,5 +8,6 @@ final readonly class CourseVideoReference
         public string $provider,
         public string $videoId,
         public ?string $originalUrl = null,
-    ) {}
+    ) {
+    }
 }

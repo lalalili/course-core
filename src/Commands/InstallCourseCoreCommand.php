@@ -17,7 +17,7 @@ class InstallCourseCoreCommand extends Command
         $force = (bool) $this->option('force');
 
         $this->call('vendor:publish', [
-            '--tag' => 'course-core-config',
+            '--tag'   => 'course-core-config',
             '--force' => $force,
         ]);
 

@@ -9,6 +9,7 @@ use Lalalili\CourseCore\Contracts\CourseTenantResolver;
 use Lalalili\CourseCore\Contracts\CourseVideoPlatformManager;
 use Lalalili\CourseCore\Contracts\CourseVideoProvider;
 use Lalalili\CourseCore\Support\ConfigCourseVideoPlatformManager;
+use Lalalili\CourseCore\Services\CourseReadinessService;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -29,5 +30,6 @@ class CourseCoreServiceProvider extends PackageServiceProvider
         $this->app->bind(CourseProductResolver::class, fn ($app) => $app->make(config('course-core.product_resolver')));
         $this->app->singleton(CourseVideoPlatformManager::class, ConfigCourseVideoPlatformManager::class);
         $this->app->bind(CourseVideoProvider::class, fn ($app) => $app->make(config('course-core.video_provider')));
+        $this->app->singleton(CourseReadinessService::class);
     }
 }

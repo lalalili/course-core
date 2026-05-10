@@ -2,4 +2,4 @@
 
 use Lalalili\CourseCore\Tests\TestCase;
 
-uses(TestCase::class)->in('Feature', 'Unit');
+uses(TestCase::class)->in(__DIR__.'/Feature', __DIR__.'/Unit');

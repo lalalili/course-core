@@ -1,6 +1,7 @@
 {
     "name": "lalalili/course-core",
     "description": "Reusable online course domain layer for Laravel applications.",
+    "version": "0.2.1",
     "type": "library",
     "license": "MIT",
     "require": {

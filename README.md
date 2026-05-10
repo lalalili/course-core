@@ -6,7 +6,7 @@ Reusable online course domain layer for Laravel applications.
 
 - Course access, tenant, product, and video provider contracts.
 - Configurable model class names for host applications.
-- Safe null video provider by default, with optional Vimeo provider support.
+- Safe null video provider by default, with Vimeo, Cloudflare Stream, and VdoCipher platform adapters.
 - Playback unit initialization service that can be reused across projects.
 - Install command with model and migration stubs for new applications.
 
@@ -70,8 +70,33 @@ Install `vimeo/laravel` and set `video_provider` to `VimeoCourseVideoProvider::c
 - `CourseTenantResolver`
 - `CourseProductResolver`
 - `CourseVideoProvider`
+- `CourseVideoPlatform`
+- `CourseVideoPlatformManager`
 
 Each host application owns its commerce, tenant, and permission rules by binding these contracts through config.
+
+## Video Platform Lifecycle
+
+`CourseVideoPlatform` is the stable abstraction for provider-specific video operations. The package owns only provider API behavior; host applications still own database records, upload sessions, authorization, queues, and course-unit binding.
+
+Supported lifecycle methods:
+
+- `createDirectUploadSession()` returns an optional provider direct upload session. Providers may return `null` when direct uploads are not supported or not enabled.
+- `importFromUrl()` imports a staged file URL into the provider and returns provider ids, embed URLs, duration, thumbnail, and transcode metadata.
+- `refreshStatus()` reads provider processing state and normalizes it to `CourseVideoStatus`.
+- `updateVideo()` updates provider metadata such as title or description.
+- `deleteVideo()` removes the provider-side video.
+- `getEmbedUrl()` and `extractVideoId()` keep legacy URL playback compatible.
+
+For large-file admin uploads, hosts should prefer staging files in object storage first, then calling `importFromUrl()` from a queued job. Direct provider uploads and TUS are intentionally kept behind the contract until a host has verified that provider flow in production.
+
+Recommended host state mapping:
+
+- Session `created` or `uploading`: object storage upload is not complete.
+- Session `uploaded` or `importing`: the staged file is ready and a provider import job is running.
+- Session `processing`: the provider has accepted the video but transcoding is not ready.
+- Session `ready`: `refreshStatus()` reports `isReady`.
+- Session `failed` or `cancelled`: host-side terminal states with the provider error or user action stored on the upload session.
 
 ## Releases
 

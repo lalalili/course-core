@@ -8,7 +8,9 @@ use Lalalili\CourseCore\Data\CourseVideoDetails;
 
 class ConfiguredCourseVideoProvider implements CourseVideoProvider
 {
-    public function __construct(private readonly CourseVideoPlatformManager $manager) {}
+    public function __construct(private readonly CourseVideoPlatformManager $manager)
+    {
+    }
 
     public function extractVideoId(?string $url): ?string
     {

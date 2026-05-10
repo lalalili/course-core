@@ -9,8 +9,7 @@ use Lalalili\CourseCore\Services\CoursePlaybackService;
 
 function courseCoreModel(array $attributes = []): Model
 {
-    return new class($attributes) extends Model
-    {
+    return new class ($attributes) extends Model {
         protected $guarded = [];
 
         public $timestamps = false;
@@ -19,9 +18,10 @@ function courseCoreModel(array $attributes = []): Model
 
 function courseCoreUser(int $id): Authenticatable
 {
-    return new class($id) implements Authenticatable
-    {
-        public function __construct(protected int $id) {}
+    return new class ($id) implements Authenticatable {
+        public function __construct(protected int $id)
+        {
+        }
 
         public function getAuthIdentifierName(): string
         {
@@ -48,7 +48,9 @@ function courseCoreUser(int $id): Authenticatable
             return null;
         }
 
-        public function setRememberToken($value) {}
+        public function setRememberToken($value)
+        {
+        }
 
         public function getRememberTokenName(): string
         {
@@ -58,8 +60,7 @@ function courseCoreUser(int $id): Authenticatable
 }
 
 it('returns the first free unit without creating history', function (): void {
-    $service = new CoursePlaybackService(new class implements CourseAccessResolver
-    {
+    $service = new CoursePlaybackService(new class () implements CourseAccessResolver {
         public function canViewCourse(?Authenticatable $user, Model $course): bool
         {
             return true;
@@ -86,8 +87,7 @@ it('returns the first free unit without creating history', function (): void {
 it('fails loudly when a paid unit needs history but history model is not configured', function (): void {
     config()->set('course-core.models.history', null);
 
-    $service = new CoursePlaybackService(new class implements CourseAccessResolver
-    {
+    $service = new CoursePlaybackService(new class () implements CourseAccessResolver {
         public function canViewCourse(?Authenticatable $user, Model $course): bool
         {
             return true;

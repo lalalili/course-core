@@ -54,7 +54,7 @@ class VimeoCourseVideoProvider implements CourseVideoPlatform
         } catch (Exception $exception) {
             logger()->error('Vimeo API request failed.', [
                 'exception' => $exception::class,
-                'message' => $exception->getMessage(),
+                'message'   => $exception->getMessage(),
             ]);
         }
 
@@ -64,11 +64,11 @@ class VimeoCourseVideoProvider implements CourseVideoPlatform
     public function getEmbedUrl(string $videoId, array $options = []): string
     {
         $query = http_build_query([
-            'autoplay' => $options['autoplay'] ?? false,
-            'loop' => $options['loop'] ?? false,
-            'title' => $options['show_title'] ?? false,
-            'byline' => $options['byline'] ?? false,
-            'portrait' => $options['portrait'] ?? false,
+            'autoplay'  => $options['autoplay'] ?? false,
+            'loop'      => $options['loop'] ?? false,
+            'title'     => $options['show_title'] ?? false,
+            'byline'    => $options['byline'] ?? false,
+            'portrait'  => $options['portrait'] ?? false,
             'autopause' => false,
         ]);
 
@@ -82,9 +82,9 @@ class VimeoCourseVideoProvider implements CourseVideoPlatform
         $response = Vimeo::request('/me/videos/', [
             'upload' => [
                 'approach' => 'tus',
-                'size' => $request->fileSize,
+                'size'     => $request->fileSize,
             ],
-            'name' => $request->title ?? pathinfo($request->fileName, PATHINFO_FILENAME),
+            'name'        => $request->title ?? pathinfo($request->fileName, PATHINFO_FILENAME),
             'description' => $request->description,
         ], 'POST');
 
@@ -110,9 +110,9 @@ class VimeoCourseVideoProvider implements CourseVideoPlatform
         $response = Vimeo::request('/me/videos/', [
             'upload' => [
                 'approach' => 'pull',
-                'link' => $request->sourceUrl,
+                'link'     => $request->sourceUrl,
             ],
-            'name' => $request->title,
+            'name'        => $request->title,
             'description' => $request->description,
         ], 'POST');
 
