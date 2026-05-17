@@ -21,6 +21,39 @@ final readonly class CourseReadinessResult
         return $this->blockingIssues === [];
     }
 
+    public function hasWarnings(): bool
+    {
+        return $this->warnings !== [];
+    }
+
+    public function hasSuggestions(): bool
+    {
+        return $this->suggestions !== [];
+    }
+
+    public function summary(): string
+    {
+        if ($this->isReady() && ! $this->hasWarnings() && ! $this->hasSuggestions()) {
+            return '上架檢查通過。';
+        }
+
+        $lines = [];
+
+        foreach ($this->blockingIssues as $issue) {
+            $lines[] = $issue;
+        }
+
+        foreach ($this->warnings as $warning) {
+            $lines[] = $warning;
+        }
+
+        foreach ($this->suggestions as $suggestion) {
+            $lines[] = $suggestion;
+        }
+
+        return implode("\n", $lines);
+    }
+
     /**
      * @return array{ready: bool, blocking_issues: list<string>, warnings: list<string>, suggestions: list<string>}
      */

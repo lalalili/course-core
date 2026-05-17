@@ -2,6 +2,10 @@
 
 use Illuminate\Database\Eloquent\Model;
 use Lalalili\CourseCore\Contracts\CourseProductResolver;
+use Lalalili\CourseCore\Readiness\BasicFieldsCheck;
+use Lalalili\CourseCore\Readiness\DetailCheck;
+use Lalalili\CourseCore\Readiness\ProductCheck;
+use Lalalili\CourseCore\Readiness\UnitsCheck;
 use Lalalili\CourseCore\Services\CourseReadinessService;
 
 it('reports blocking issues for courses without required structure', function (): void {
@@ -62,7 +66,12 @@ it('can require product bindings and ready videos', function (): void {
         }
     };
 
-    $result = (new CourseReadinessService($resolver))->evaluate(
+    $result = (new CourseReadinessService([
+        new BasicFieldsCheck(),
+        new DetailCheck(),
+        new ProductCheck($resolver),
+        new UnitsCheck(),
+    ]))->evaluate(
         course: $course,
         requireProduct: true,
         requireReadyVideos: true,
@@ -99,11 +108,18 @@ if (! function_exists('readinessModel')) {
 if (! function_exists('readinessService')) {
     function readinessService(): CourseReadinessService
     {
-        return new CourseReadinessService(new class () implements CourseProductResolver {
+        $resolver = new class () implements CourseProductResolver {
             public function productForCourse(Model $course): ?Model
             {
                 return null;
             }
-        });
+        };
+
+        return new CourseReadinessService([
+            new BasicFieldsCheck(),
+            new DetailCheck(),
+            new ProductCheck($resolver),
+            new UnitsCheck(),
+        ]);
     }
 }

@@ -107,14 +107,21 @@ class VimeoCourseVideoProvider implements CourseVideoPlatform
     {
         $this->ensureVimeoPackageIsInstalled();
 
-        $response = Vimeo::request('/me/videos/', [
+        $body = [
             'upload' => [
                 'approach' => 'pull',
                 'link'     => $request->sourceUrl,
             ],
             'name'        => $request->title,
             'description' => $request->description,
-        ], 'POST');
+        ];
+
+        $folderId = $this->resolveFolderId($request->folderId);
+        if ($folderId !== null) {
+            $body['folder_uri'] = "/me/projects/{$folderId}";
+        }
+
+        $response = Vimeo::request('/me/videos/', $body, 'POST');
 
         if (! in_array($response['status'] ?? null, [200, 201], true)) {
             throw new RuntimeException('Unable to import video into Vimeo.');
@@ -165,6 +172,22 @@ class VimeoCourseVideoProvider implements CourseVideoPlatform
         $this->ensureVimeoPackageIsInstalled();
 
         Vimeo::request("/videos/{$providerVideoId}", [], 'DELETE');
+    }
+
+    /**
+     * 解析 Vimeo folder ID：優先使用傳入的 folderId（metadata 中的 Vimeo folder ID），
+     * 若無則使用 config 設定的預設資料夾。
+     * 注意：此處的 folderId 是 Vimeo folder 的數字 ID（非 DB Folder 主鍵）。
+     */
+    protected function resolveFolderId(?int $folderId): ?string
+    {
+        if ($folderId !== null) {
+            return (string) $folderId;
+        }
+
+        $default = config('course-core.providers.vimeo.default_folder_id');
+
+        return is_string($default) && $default !== '' ? $default : null;
     }
 
     protected function ensureVimeoPackageIsInstalled(): void

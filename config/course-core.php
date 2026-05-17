@@ -42,7 +42,15 @@ return [
         'vdocipher'         => VdoCipherVideoProvider::class,
     ],
 
+    'readiness' => [
+        'checks'     => null,
+        'eager_load' => [],
+    ],
+
     'providers' => [
+        'vimeo' => [
+            'default_folder_id' => env('VIMEO_DEFAULT_FOLDER_ID', ''),
+        ],
         'cloudflare_stream' => [
             'account_id'         => env('CLOUDFLARE_STREAM_ACCOUNT_ID'),
             'api_token'          => env('CLOUDFLARE_STREAM_API_TOKEN'),
