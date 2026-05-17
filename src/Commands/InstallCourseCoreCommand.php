@@ -23,6 +23,7 @@ class InstallCourseCoreCommand extends Command
 
         $this->publishModelStubs($files, $force);
         $this->publishMigrationStub($files, $force);
+        $this->publishRatingsMigrationStub($files, $force);
 
         $this->info('course-core install files are ready.');
 
@@ -66,6 +67,23 @@ class InstallCourseCoreCommand extends Command
         }
 
         $files->copy(__DIR__.'/../../stubs/database/migrations/create_course_core_tables.php.stub', $target);
+        $this->line("Published migration: {$target}");
+    }
+
+    protected function publishRatingsMigrationStub(Filesystem $files, bool $force): void
+    {
+        $targetDirectory = database_path('migrations');
+        $target = $targetDirectory.'/'.date('Y_m_d_His').'_create_ratings_table.php';
+
+        if (! $force && collect($files->files($targetDirectory))->contains(
+            fn ($file): bool => Str::endsWith($file->getFilename(), '_create_ratings_table.php')
+        )) {
+            $this->line('Skipped existing ratings migration.');
+
+            return;
+        }
+
+        $files->copy(__DIR__.'/../../stubs/database/migrations/create_ratings_table.php.stub', $target);
         $this->line("Published migration: {$target}");
     }
 }

@@ -15,6 +15,7 @@ return [
         'chapter'  => null,
         'detail'   => null,
         'history'  => null,
+        'rating'   => null,
     ],
 
     'coming_days' => env('COURSE_COMING_DAYS', 30),
