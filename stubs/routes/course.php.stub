@@ -1,0 +1,26 @@
+<?php
+
+use {{ namespace }}\CourseController;
+use Illuminate\Support\Facades\Route;
+
+/*
+|--------------------------------------------------------------------------
+| Course Routes — published by course-core:install
+|--------------------------------------------------------------------------
+|
+| Register these routes inside your RouteServiceProvider (or routes/web.php).
+| Apply any middleware (auth, verified, throttle, etc.) as your app requires.
+|
+*/
+
+Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
+Route::get('/courses/search', [CourseController::class, 'search'])->name('courses.search');
+Route::get('/courses/category/{id}', [CourseController::class, 'category'])->name('courses.category');
+Route::get('/courses/{ulid}', [CourseController::class, 'show'])->name('courses.show');
+
+Route::middleware('auth')->group(function (): void {
+    Route::get('/courses/{ulid}/classroom', [CourseController::class, 'classroom'])->name('courses.classroom');
+    Route::post('/courses/{ulid}/progress/sync', [CourseController::class, 'syncProgress'])->name('courses.progress.sync');
+    Route::get('/courses/{ulid}/progress', [CourseController::class, 'fetchProgress'])->name('courses.progress.fetch');
+    Route::get('/courses/{ulid}/unit/{unitId}/closest', [CourseController::class, 'findClosestUnit'])->name('courses.unit.closest');
+});

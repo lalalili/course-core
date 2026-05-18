@@ -13,7 +13,7 @@ class CourseRatingService
     {
         $model = config('course-core.models.rating');
 
-        if (! is_string($model) || ! class_exists($model)) {
+        if (! is_string($model) || ! is_subclass_of($model, Model::class)) {
             throw CourseConfigurationException::missingModel('rating');
         }
 
@@ -26,18 +26,21 @@ class CourseRatingService
 
         return $model::updateOrCreate(
             [
-                'user_id'       => $userId,
+                'user_id' => $userId,
                 'rateable_type' => $rateable->getMorphClass(),
-                'rateable_id'   => $rateable->getKey(),
+                'rateable_id' => $rateable->getKey(),
             ],
             [
-                'title'   => $title,
+                'title' => $title,
                 'comment' => $comment,
-                'score'   => $score,
+                'score' => $score,
             ]
         );
     }
 
+    /**
+     * @return LengthAwarePaginator<int, Model>
+     */
     public function forRateable(Model $rateable, int $perPage = 5): LengthAwarePaginator
     {
         $model = $this->ratingModelClass();

@@ -1,7 +1,7 @@
 {
     "name": "lalalili/course-core",
     "description": "Reusable online course domain layer for Laravel applications.",
-    "version": "0.4.0",
+    "version": "1.0.0",
     "type": "library",
     "license": "MIT",
     "require": {
@@ -18,7 +18,8 @@
         "orchestra/testbench": "^9.0|^10.0|^11.0",
         "pestphp/pest": "^3.0|^4.0",
         "pestphp/pest-plugin-laravel": "^3.0|^4.0",
-        "laravel/pint": "^1.0"
+        "laravel/pint": "^1.0",
+        "larastan/larastan": "^3.0"
     },
     "autoload": {
         "psr-4": {
@@ -42,11 +43,13 @@
     },
     "scripts": {
         "test": "pest",
+        "analyse": "phpstan analyse --configuration=phpstan.neon.dist --no-progress",
         "format": "pint"
     },
     "config": {
         "allow-plugins": {
-            "pestphp/pest-plugin": true
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
         }
     }
 }

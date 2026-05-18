@@ -10,20 +10,22 @@ class InstallCourseCoreCommand extends Command
 {
     protected $signature = 'course-core:install {--force : Overwrite existing published files}';
 
-    protected $description = 'Publish course-core config, model stubs, and migration stubs.';
+    protected $description = 'Publish course-core config, model stubs, migration stubs, and scaffolding.';
 
     public function handle(Filesystem $files): int
     {
         $force = (bool) $this->option('force');
 
         $this->call('vendor:publish', [
-            '--tag'   => 'course-core-config',
+            '--tag' => 'course-core-config',
             '--force' => $force,
         ]);
 
         $this->publishModelStubs($files, $force);
         $this->publishMigrationStub($files, $force);
         $this->publishRatingsMigrationStub($files, $force);
+        $this->publishControllerStub($files, $force);
+        $this->publishRoutesStub($files, $force);
 
         $this->info('course-core install files are ready.');
 
@@ -85,5 +87,40 @@ class InstallCourseCoreCommand extends Command
 
         $files->copy(__DIR__.'/../../stubs/database/migrations/create_ratings_table.php.stub', $target);
         $this->line("Published migration: {$target}");
+    }
+
+    protected function publishControllerStub(Filesystem $files, bool $force): void
+    {
+        $namespace = rtrim(app()->getNamespace(), '\\').'\\Http\\Controllers';
+        $targetDirectory = app_path('Http/Controllers');
+        $target = $targetDirectory.'/CourseController.php';
+
+        if ($files->exists($target) && ! $force) {
+            $this->line("Skipped existing controller: {$target}");
+
+            return;
+        }
+
+        $files->ensureDirectoryExists($targetDirectory);
+
+        $contents = str_replace('{{ namespace }}', $namespace, $files->get(__DIR__.'/../../stubs/http/CourseController.php.stub'));
+        $files->put($target, $contents);
+        $this->line("Published controller: {$target}");
+    }
+
+    protected function publishRoutesStub(Filesystem $files, bool $force): void
+    {
+        $namespace = rtrim(app()->getNamespace(), '\\').'\\Http\\Controllers';
+        $target = base_path('routes/course.php');
+
+        if ($files->exists($target) && ! $force) {
+            $this->line("Skipped existing routes file: {$target}");
+
+            return;
+        }
+
+        $contents = str_replace('{{ namespace }}', $namespace, $files->get(__DIR__.'/../../stubs/routes/course.php.stub'));
+        $files->put($target, $contents);
+        $this->line("Published routes: {$target}");
     }
 }

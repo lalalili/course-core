@@ -10,20 +10,23 @@ use Lalalili\CourseCore\Support\VimeoCourseVideoProvider;
 
 return [
     'models' => [
-        'course'   => null,
+        'course' => null,
         'category' => null,
-        'chapter'  => null,
-        'detail'   => null,
-        'history'  => null,
-        'rating'   => null,
+        'chapter' => null,
+        'detail' => null,
+        'history' => null,
+        'rating' => null,
     ],
 
     'coming_days' => env('COURSE_COMING_DAYS', 30),
 
-    'access_resolver'  => NullCourseAccessResolver::class,
-    'tenant_resolver'  => NullCourseTenantResolver::class,
+    'search' => null,
+    'rich_content_renderer' => null,
+
+    'access_resolver' => NullCourseAccessResolver::class,
+    'tenant_resolver' => NullCourseTenantResolver::class,
     'product_resolver' => NullCourseProductResolver::class,
-    'video_provider'   => ConfiguredCourseVideoProvider::class,
+    'video_provider' => ConfiguredCourseVideoProvider::class,
 
     'default_video_platform' => env('COURSE_VIDEO_PLATFORM', 'vimeo'),
 
@@ -38,13 +41,13 @@ return [
     'video_cleanup_staging_after_import' => env('COURSE_VIDEO_CLEANUP_STAGING_AFTER_IMPORT', true),
 
     'video_platforms' => [
-        'vimeo'             => VimeoCourseVideoProvider::class,
+        'vimeo' => VimeoCourseVideoProvider::class,
         'cloudflare_stream' => CloudflareStreamVideoProvider::class,
-        'vdocipher'         => VdoCipherVideoProvider::class,
+        'vdocipher' => VdoCipherVideoProvider::class,
     ],
 
     'readiness' => [
-        'checks'     => null,
+        'checks' => null,
         'eager_load' => [],
     ],
 
@@ -53,8 +56,8 @@ return [
             'default_folder_id' => env('VIMEO_DEFAULT_FOLDER_ID', ''),
         ],
         'cloudflare_stream' => [
-            'account_id'         => env('CLOUDFLARE_STREAM_ACCOUNT_ID'),
-            'api_token'          => env('CLOUDFLARE_STREAM_API_TOKEN'),
+            'account_id' => env('CLOUDFLARE_STREAM_ACCOUNT_ID'),
+            'api_token' => env('CLOUDFLARE_STREAM_API_TOKEN'),
             'customer_subdomain' => env('CLOUDFLARE_STREAM_CUSTOMER_SUBDOMAIN'),
         ],
         'vdocipher' => [
