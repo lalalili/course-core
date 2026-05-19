@@ -22,7 +22,7 @@ use Lalalili\CourseCore\Support\NullCourseSearch;
 
 function classroomCourseModel(): string
 {
-    return new class extends Model
+    return get_class(new class extends Model
     {
         protected $table = 'cl_courses';
 
@@ -55,12 +55,12 @@ function classroomCourseModel(): string
         {
             return $this->hasMany(classroomRatingModel(), 'course_id');
         }
-    }::class;
+    });
 }
 
 function classroomChapterModel(): string
 {
-    return new class extends Model
+    return get_class(new class extends Model
     {
         protected $table = 'cl_chapters';
 
@@ -72,12 +72,12 @@ function classroomChapterModel(): string
         {
             return $this->hasMany(classroomUnitModel(), 'parent_id');
         }
-    }::class;
+    });
 }
 
 function classroomUnitModel(): string
 {
-    return new class extends Model
+    return get_class(new class extends Model
     {
         protected $table = 'cl_chapters';
 
@@ -89,67 +89,67 @@ function classroomUnitModel(): string
         {
             return $this->belongsTo(classroomVideoModel(), 'video_id');
         }
-    }::class;
+    });
 }
 
 function classroomVideoModel(): string
 {
-    return new class extends Model
+    return get_class(new class extends Model
     {
         protected $table = 'cl_videos';
 
         protected $guarded = [];
 
         public $timestamps = false;
-    }::class;
+    });
 }
 
 function classroomHistoryModel(): string
 {
-    return new class extends Model
+    return get_class(new class extends Model
     {
         protected $table = 'cl_histories';
 
         protected $guarded = [];
 
         public $timestamps = false;
-    }::class;
+    });
 }
 
 function classroomRatingModel(): string
 {
-    return new class extends Model
+    return get_class(new class extends Model
     {
         protected $table = 'cl_ratings';
 
         protected $guarded = [];
 
         public $timestamps = false;
-    }::class;
+    });
 }
 
 function classroomProductModel(): string
 {
-    return new class extends Model
+    return get_class(new class extends Model
     {
         protected $table = 'cl_products';
 
         protected $guarded = [];
 
         public $timestamps = false;
-    }::class;
+    });
 }
 
 function classroomDetailModel(): string
 {
-    return new class extends Model
+    return get_class(new class extends Model
     {
         protected $table = 'cl_details';
 
         protected $guarded = [];
 
         public $timestamps = false;
-    }::class;
+    });
 }
 
 // ---------------------------------------------------------------------------

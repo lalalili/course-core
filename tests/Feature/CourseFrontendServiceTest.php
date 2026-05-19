@@ -18,7 +18,7 @@ use Lalalili\CourseCore\Support\NullCourseSearch;
 
 function frontendCourseModel(): string
 {
-    return new class extends Model
+    return get_class(new class extends Model
     {
         protected $table = 'courses';
 
@@ -50,12 +50,12 @@ function frontendCourseModel(): string
         {
             return $this->hasMany(frontendCategoryModel(), 'id', 'course_category_id');
         }
-    }::class;
+    });
 }
 
 function frontendCategoryModel(): string
 {
-    return new class extends Model
+    return get_class(new class extends Model
     {
         protected $table = 'course_categories';
 
@@ -72,7 +72,7 @@ function frontendCategoryModel(): string
         {
             return $this->hasMany(frontendCourseModel(), 'course_category_id');
         }
-    }::class;
+    });
 }
 
 // ---------------------------------------------------------------------------

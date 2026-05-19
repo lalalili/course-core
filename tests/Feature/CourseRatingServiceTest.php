@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Lalalili\CourseCore\Exceptions\CourseConfigurationException;
@@ -12,7 +13,8 @@ use Lalalili\CourseCore\Services\CourseRatingService;
 
 function ratingRateable(string $type = 'course', int|string $id = 1): Model
 {
-    $model = new class extends Model {
+    $model = new class extends Model
+    {
         public string $morphType = 'course';
 
         public int|string $morphId = 1;
@@ -41,16 +43,17 @@ function ratingRateable(string $type = 'course', int|string $id = 1): Model
 // A minimal Eloquent model backed by the in-memory ratings table
 function ratingModel(): string
 {
-    return new class extends Model {
+    return get_class(new class extends Model
+    {
         protected $table = 'ratings';
 
         protected $guarded = [];
 
-        public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+        public function user(): BelongsTo
         {
             return $this->belongsTo(get_class($this), 'user_id');
         }
-    }::class;
+    });
 }
 
 // ---------------------------------------------------------------------------

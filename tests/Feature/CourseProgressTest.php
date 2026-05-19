@@ -23,7 +23,7 @@ use Lalalili\CourseCore\Support\NullCourseSearch;
 
 function pgCourseModel(): string
 {
-    return new class extends Model
+    return get_class(new class extends Model
     {
         protected $table = 'pg_courses';
 
@@ -41,12 +41,12 @@ function pgCourseModel(): string
             return $this->hasMany(pgChapterModel(), 'course_id')
                 ->whereNull('parent_id');
         }
-    }::class;
+    });
 }
 
 function pgChapterModel(): string
 {
-    return new class extends Model
+    return get_class(new class extends Model
     {
         protected $table = 'pg_chapters';
 
@@ -58,12 +58,12 @@ function pgChapterModel(): string
         {
             return $this->hasMany(pgUnitModel(), 'parent_id');
         }
-    }::class;
+    });
 }
 
 function pgUnitModel(): string
 {
-    return new class extends Model
+    return get_class(new class extends Model
     {
         protected $table = 'pg_chapters';
 
@@ -75,19 +75,19 @@ function pgUnitModel(): string
         {
             return $this->belongsTo(get_class($this), 'video_id');
         }
-    }::class;
+    });
 }
 
 function pgHistoryModel(): string
 {
-    return new class extends Model
+    return get_class(new class extends Model
     {
         protected $table = 'pg_histories';
 
         protected $guarded = [];
 
         public $timestamps = false;
-    }::class;
+    });
 }
 
 // ---------------------------------------------------------------------------

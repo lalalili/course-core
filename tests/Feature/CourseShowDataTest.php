@@ -20,7 +20,7 @@ use Lalalili\CourseCore\Support\NullRichContentRenderer;
 
 function showCourseModel(): string
 {
-    return new class extends Model
+    return get_class(new class extends Model
     {
         protected $table = 'courses';
 
@@ -62,48 +62,48 @@ function showCourseModel(): string
         {
             return $this->hasMany(showTagModel(), 'course_id');
         }
-    }::class;
+    });
 }
 
 function showProductModel(): string
 {
-    return new class extends Model
+    return get_class(new class extends Model
     {
         protected $table = 'products';
 
         protected $guarded = [];
 
         public $timestamps = false;
-    }::class;
+    });
 }
 
 function showTeacherModel(): string
 {
-    return new class extends Model
+    return get_class(new class extends Model
     {
         protected $table = 'teachers';
 
         protected $guarded = [];
 
         public $timestamps = false;
-    }::class;
+    });
 }
 
 function showDetailModel(): string
 {
-    return new class extends Model
+    return get_class(new class extends Model
     {
         protected $table = 'course_details';
 
         protected $guarded = [];
 
         public $timestamps = false;
-    }::class;
+    });
 }
 
 function showChapterModel(): string
 {
-    return new class extends Model
+    return get_class(new class extends Model
     {
         protected $table = 'chapters';
 
@@ -115,12 +115,12 @@ function showChapterModel(): string
         {
             return $this->hasMany(get_class($this), 'parent_id');
         }
-    }::class;
+    });
 }
 
 function showRatingModel(): string
 {
-    return new class extends Model
+    return get_class(new class extends Model
     {
         protected $table = 'ratings';
 
@@ -132,19 +132,19 @@ function showRatingModel(): string
         {
             return $this->belongsTo(get_class($this), 'user_id');
         }
-    }::class;
+    });
 }
 
 function showTagModel(): string
 {
-    return new class extends Model
+    return get_class(new class extends Model
     {
         protected $table = 'tags';
 
         protected $guarded = [];
 
         public $timestamps = false;
-    }::class;
+    });
 }
 
 // ---------------------------------------------------------------------------
