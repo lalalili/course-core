@@ -7,8 +7,7 @@ final readonly class CourseVideoDetails
     public function __construct(
         public int $duration,
         public string $playerEmbedUrl,
-    ) {
-    }
+    ) {}
 
     /**
      * @return array{duration:int, player_embed_url:string}
@@ -16,7 +15,7 @@ final readonly class CourseVideoDetails
     public function toArray(): array
     {
         return [
-            'duration'         => $this->duration,
+            'duration' => $this->duration,
             'player_embed_url' => $this->playerEmbedUrl,
         ];
     }

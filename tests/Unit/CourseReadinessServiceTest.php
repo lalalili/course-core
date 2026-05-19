@@ -9,7 +9,8 @@ use Lalalili\CourseCore\Readiness\UnitsCheck;
 use Lalalili\CourseCore\Services\CourseReadinessService;
 
 it('reports blocking issues for courses without required structure', function (): void {
-    $course = new class () extends Model {
+    $course = new class extends Model
+    {
         protected $guarded = [];
     };
 
@@ -24,7 +25,7 @@ it('reports blocking issues for courses without required structure', function ()
 
 it('accepts a course with detail, chapters, units, and video references', function (): void {
     $course = readinessModel([
-        'title'              => 'Course title',
+        'title' => 'Course title',
         'course_category_id' => 1,
     ]);
     $detail = readinessModel(['content' => 'Course content']);
@@ -43,7 +44,7 @@ it('accepts a course with detail, chapters, units, and video references', functi
 it('can require product bindings and ready videos', function (): void {
     $product = readinessModel(['title' => 'Product']);
     $course = readinessModel([
-        'title'              => 'Course title',
+        'title' => 'Course title',
         'course_category_id' => 1,
     ]);
     $course->setRelation('product', $product);
@@ -57,7 +58,8 @@ it('can require product bindings and ready videos', function (): void {
     $chapter->setRelation('units', collect([$unit]));
     $course->setRelation('chapters', collect([$chapter]));
 
-    $resolver = new class () implements CourseProductResolver {
+    $resolver = new class implements CourseProductResolver
+    {
         public function productForCourse(Model $course): ?Model
         {
             $product = $course->getRelationValue('product');
@@ -67,10 +69,10 @@ it('can require product bindings and ready videos', function (): void {
     };
 
     $result = (new CourseReadinessService([
-        new BasicFieldsCheck(),
-        new DetailCheck(),
+        new BasicFieldsCheck,
+        new DetailCheck,
         new ProductCheck($resolver),
-        new UnitsCheck(),
+        new UnitsCheck,
     ]))->evaluate(
         course: $course,
         requireProduct: true,
@@ -90,7 +92,8 @@ if (! function_exists('readinessModel')) {
      */
     function readinessModel(array $attributes = []): Model
     {
-        return new class ($attributes) extends Model {
+        return new class($attributes) extends Model
+        {
             protected $guarded = [];
 
             /**
@@ -108,7 +111,8 @@ if (! function_exists('readinessModel')) {
 if (! function_exists('readinessService')) {
     function readinessService(): CourseReadinessService
     {
-        $resolver = new class () implements CourseProductResolver {
+        $resolver = new class implements CourseProductResolver
+        {
             public function productForCourse(Model $course): ?Model
             {
                 return null;
@@ -116,10 +120,10 @@ if (! function_exists('readinessService')) {
         };
 
         return new CourseReadinessService([
-            new BasicFieldsCheck(),
-            new DetailCheck(),
+            new BasicFieldsCheck,
+            new DetailCheck,
             new ProductCheck($resolver),
-            new UnitsCheck(),
+            new UnitsCheck,
         ]);
     }
 }

@@ -55,11 +55,7 @@ class NullCourseVideoProvider implements CourseVideoPlatform
         );
     }
 
-    public function updateVideo(string $providerVideoId, array $properties): void
-    {
-    }
+    public function updateVideo(string $providerVideoId, array $properties): void {}
 
-    public function deleteVideo(string $providerVideoId): void
-    {
-    }
+    public function deleteVideo(string $providerVideoId): void {}
 }

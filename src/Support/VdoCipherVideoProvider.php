@@ -66,9 +66,9 @@ class VdoCipherVideoProvider implements CourseVideoPlatform
         $response = $this->client()
             ->asJson()
             ->put('https://dev.vdocipher.com/api/videos/importUrl', array_filter([
-                'url'      => $request->sourceUrl,
+                'url' => $request->sourceUrl,
                 'folderId' => $request->metadata['folder_id'] ?? 'root',
-                'title'    => $request->title,
+                'title' => $request->title,
             ]))
             ->throw()
             ->json();
@@ -110,7 +110,7 @@ class VdoCipherVideoProvider implements CourseVideoPlatform
         $this->client()
             ->asJson()
             ->post("https://dev.vdocipher.com/api/videos/{$providerVideoId}/", array_filter([
-                'title'       => $properties['title'] ?? $properties['name'] ?? null,
+                'title' => $properties['title'] ?? $properties['name'] ?? null,
                 'description' => $properties['description'] ?? null,
             ]))
             ->throw();
@@ -133,7 +133,7 @@ class VdoCipherVideoProvider implements CourseVideoPlatform
 
         return Http::withHeaders([
             'Authorization' => "Apisecret {$apiSecret}",
-            'Accept'        => 'application/json',
+            'Accept' => 'application/json',
         ])->timeout(30)->connectTimeout(10);
     }
 }

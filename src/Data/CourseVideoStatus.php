@@ -16,6 +16,5 @@ final readonly class CourseVideoStatus
         public ?string $thumbnailUrl = null,
         public ?string $playerEmbedUrl = null,
         public array $metadata = [],
-    ) {
-    }
+    ) {}
 }

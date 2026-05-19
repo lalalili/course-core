@@ -16,6 +16,5 @@ final readonly class CourseVideoImportResult
         public ?int $duration = null,
         public ?string $thumbnailUrl = null,
         public array $metadata = [],
-    ) {
-    }
+    ) {}
 }

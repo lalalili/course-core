@@ -4,7 +4,8 @@ namespace Lalalili\CourseCore\Contracts;
 
 interface VideoModelContract
 {
-    public function getKey(): mixed;
+    /** @return mixed */
+    public function getKey();
 
     public function videoProviderKey(): string;
 

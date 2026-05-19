@@ -17,8 +17,7 @@ final readonly class CourseVideoUploadSession
         public ?string $stagingPath = null,
         public string $strategy = 'provider_direct',
         public array $metadata = [],
-    ) {
-    }
+    ) {}
 
     /**
      * @return array<string, mixed>
@@ -26,14 +25,14 @@ final readonly class CourseVideoUploadSession
     public function toArray(): array
     {
         return [
-            'upload_url'        => $this->uploadUrl,
-            'method'            => $this->method,
-            'headers'           => $this->headers,
+            'upload_url' => $this->uploadUrl,
+            'method' => $this->method,
+            'headers' => $this->headers,
             'provider_video_id' => $this->providerVideoId,
-            'staging_disk'      => $this->stagingDisk,
-            'staging_path'      => $this->stagingPath,
-            'strategy'          => $this->strategy,
-            'metadata'          => $this->metadata,
+            'staging_disk' => $this->stagingDisk,
+            'staging_path' => $this->stagingPath,
+            'strategy' => $this->strategy,
+            'metadata' => $this->metadata,
         ];
     }
 }

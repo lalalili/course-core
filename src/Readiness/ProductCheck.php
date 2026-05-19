@@ -10,9 +10,7 @@ use Lalalili\CourseCore\Support\CourseReadinessReport;
 
 class ProductCheck implements CourseReadinessCheck
 {
-    public function __construct(private readonly CourseProductResolver $productResolver)
-    {
-    }
+    public function __construct(private readonly CourseProductResolver $productResolver) {}
 
     public function check(Model $course, CourseReadinessReport $report, CourseReadinessContext $context): void
     {

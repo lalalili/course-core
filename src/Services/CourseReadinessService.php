@@ -29,8 +29,7 @@ class CourseReadinessService
     public function __construct(
         private readonly iterable $checks,
         private readonly array $eagerLoad = [],
-    ) {
-    }
+    ) {}
 
     public function evaluate(
         Model $course,
@@ -41,7 +40,7 @@ class CourseReadinessService
             $course->loadMissing($this->eagerLoad);
         }
 
-        $report = new CourseReadinessReport();
+        $report = new CourseReadinessReport;
         $context = new CourseReadinessContext(
             requireProduct: $requireProduct,
             requireReadyVideos: $requireReadyVideos,

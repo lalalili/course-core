@@ -16,6 +16,5 @@ final readonly class CourseVideoImportRequest
         public ?int $folderId = null,
         public ?Authenticatable $creator = null,
         public array $metadata = [],
-    ) {
-    }
+    ) {}
 }

@@ -30,11 +30,11 @@ it('imports Cloudflare Stream videos from a source url', function (): void {
     Http::fake([
         'api.cloudflare.com/client/v4/accounts/account-123/stream/copy' => Http::response([
             'success' => true,
-            'result'  => [
-                'uid'           => 'cloudflare-video-1',
+            'result' => [
+                'uid' => 'cloudflare-video-1',
                 'readyToStream' => false,
-                'duration'      => 123000,
-                'status'        => ['state' => 'inprogress'],
+                'duration' => 123000,
+                'status' => ['state' => 'inprogress'],
             ],
         ]),
     ]);
@@ -62,8 +62,8 @@ it('creates Cloudflare Stream direct upload sessions', function (): void {
     Http::fake([
         'api.cloudflare.com/client/v4/accounts/account-123/stream/direct_upload' => Http::response([
             'success' => true,
-            'result'  => [
-                'uid'       => 'cloudflare-video-1',
+            'result' => [
+                'uid' => 'cloudflare-video-1',
                 'uploadURL' => 'https://upload.cloudflarestream.com/direct',
             ],
         ]),
@@ -99,11 +99,11 @@ it('refreshes, updates, and deletes Cloudflare Stream videos', function (): void
         'api.cloudflare.com/client/v4/accounts/account-123/stream/cloudflare-video-1' => Http::sequence()
             ->push([
                 'success' => true,
-                'result'  => [
-                    'uid'           => 'cloudflare-video-1',
+                'result' => [
+                    'uid' => 'cloudflare-video-1',
                     'readyToStream' => true,
-                    'duration'      => 123000,
-                    'status'        => ['state' => 'ready'],
+                    'duration' => 123000,
+                    'status' => ['state' => 'ready'],
                 ],
             ])
             ->push(['success' => true])
@@ -133,7 +133,7 @@ it('imports VdoCipher videos from a source url', function (): void {
 
     Http::fake([
         'dev.vdocipher.com/api/videos/importUrl' => Http::response([
-            'id'     => 'vdo-video-1',
+            'id' => 'vdo-video-1',
             'status' => 'queued',
         ]),
     ]);
@@ -172,7 +172,7 @@ it('refreshes, updates, and deletes VdoCipher videos', function (): void {
     Http::fake([
         'dev.vdocipher.com/api/videos/vdo-video-1/' => Http::sequence()
             ->push([
-                'id'     => 'vdo-video-1',
+                'id' => 'vdo-video-1',
                 'status' => 'ready',
                 'length' => 321,
                 'poster' => 'https://cdn.example.com/poster.jpg',

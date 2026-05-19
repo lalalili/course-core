@@ -12,8 +12,7 @@ class CoursePlaybackService
 {
     public function __construct(
         protected CourseAccessResolver $accessResolver,
-    ) {
-    }
+    ) {}
 
     /**
      * @param  Collection<int, Model>  $chapters
@@ -100,15 +99,15 @@ class CoursePlaybackService
 
         $historyModel::query()->firstOrCreate(
             [
-                'user_id'    => $user->getAuthIdentifier(),
-                'course_id'  => data_get($unit, 'course_id'),
+                'user_id' => $user->getAuthIdentifier(),
+                'course_id' => data_get($unit, 'course_id'),
                 'chapter_id' => data_get($unit, 'parent_id'),
-                'unit_id'    => $unit->getKey(),
+                'unit_id' => $unit->getKey(),
             ],
             [
-                'progress'        => 0,
+                'progress' => 0,
                 'last_watched_at' => now(),
-                'completed'       => false,
+                'completed' => false,
             ],
         );
     }

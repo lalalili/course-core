@@ -7,7 +7,8 @@ use Lalalili\CourseCore\Services\CourseReadinessService;
 use Lalalili\CourseCore\Support\CourseReadinessReport;
 
 it('runs custom checks from iterable', function (): void {
-    $customCheck = new class () implements CourseReadinessCheck {
+    $customCheck = new class implements CourseReadinessCheck
+    {
         public function check(Model $course, CourseReadinessReport $report, CourseReadinessContext $context): void
         {
             $report->addBlockingIssue('custom blocking issue');
@@ -17,7 +18,8 @@ it('runs custom checks from iterable', function (): void {
     };
 
     $service = new CourseReadinessService([$customCheck]);
-    $course = new class () extends Model {
+    $course = new class extends Model
+    {
         protected $guarded = [];
     };
 
@@ -32,7 +34,8 @@ it('runs custom checks from iterable', function (): void {
 });
 
 it('passes context flags to checks', function (): void {
-    $capturedCheck = new class () implements CourseReadinessCheck {
+    $capturedCheck = new class implements CourseReadinessCheck
+    {
         public ?CourseReadinessContext $lastContext = null;
 
         public function check(Model $course, CourseReadinessReport $report, CourseReadinessContext $context): void
@@ -42,7 +45,8 @@ it('passes context flags to checks', function (): void {
     };
 
     $service = new CourseReadinessService([$capturedCheck]);
-    $course = new class () extends Model {
+    $course = new class extends Model
+    {
         protected $guarded = [];
     };
 
@@ -55,7 +59,8 @@ it('passes context flags to checks', function (): void {
 });
 
 it('deduplicates repeated messages', function (): void {
-    $check = new class () implements CourseReadinessCheck {
+    $check = new class implements CourseReadinessCheck
+    {
         public function check(Model $course, CourseReadinessReport $report, CourseReadinessContext $context): void
         {
             $report->addBlockingIssue('duplicate issue');
@@ -65,7 +70,8 @@ it('deduplicates repeated messages', function (): void {
         }
     };
 
-    $result = (new CourseReadinessService([$check]))->evaluate(new class () extends Model {
+    $result = (new CourseReadinessService([$check]))->evaluate(new class extends Model
+    {
         protected $guarded = [];
     });
 
@@ -74,7 +80,8 @@ it('deduplicates repeated messages', function (): void {
 });
 
 it('returns ready result with passing summary when no issues found', function (): void {
-    $result = (new CourseReadinessService([]))->evaluate(new class () extends Model {
+    $result = (new CourseReadinessService([]))->evaluate(new class extends Model
+    {
         protected $guarded = [];
     });
 

@@ -13,8 +13,7 @@ final readonly class CourseReadinessResult
         public array $blockingIssues = [],
         public array $warnings = [],
         public array $suggestions = [],
-    ) {
-    }
+    ) {}
 
     public function isReady(): bool
     {
@@ -60,10 +59,10 @@ final readonly class CourseReadinessResult
     public function toArray(): array
     {
         return [
-            'ready'           => $this->isReady(),
+            'ready' => $this->isReady(),
             'blocking_issues' => $this->blockingIssues,
-            'warnings'        => $this->warnings,
-            'suggestions'     => $this->suggestions,
+            'warnings' => $this->warnings,
+            'suggestions' => $this->suggestions,
         ];
     }
 }

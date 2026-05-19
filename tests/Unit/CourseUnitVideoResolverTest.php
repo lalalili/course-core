@@ -183,6 +183,55 @@ it('resolve uses VideoModelContract when set as relation value', function (): vo
         ->and($payload->videoRecordId)->toBe(7);
 });
 
+it('supports Eloquent video models without overriding getKey', function (): void {
+    $video = new class extends Model implements VideoModelContract
+    {
+        public function videoProviderKey(): string
+        {
+            return 'vimeo';
+        }
+
+        public function resolvedProviderVideoId(): ?string
+        {
+            return '12345';
+        }
+
+        public function getPlayerEmbedUrl(): ?string
+        {
+            return 'https://embed/12345';
+        }
+
+        public function getProviderStatus(): ?string
+        {
+            return 'ready';
+        }
+
+        public function getTranscodeStatus(): ?string
+        {
+            return 'complete';
+        }
+
+        public function getDuration(): ?int
+        {
+            return 120;
+        }
+
+        public function getVideoMetadata(): array
+        {
+            return [];
+        }
+    };
+
+    $video->setAttribute($video->getKeyName(), 8);
+    $unit = makeUnit();
+    $unit->setRelation('video', $video);
+
+    $payload = (new CourseUnitVideoResolver(makeManager()))->resolve($unit);
+
+    expect($payload->videoRecordId)->toBe(8)
+        ->and($payload->videoId)->toBe('12345');
+});
+
 it('fromVideo uses playerEmbedUrl when already set (no manager call needed)', function (): void {
     $video = makeVideo([
         'providerKey' => 'vimeo',
