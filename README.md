@@ -103,5 +103,15 @@ Recommended host state mapping:
 Use tagged versions in host applications:
 
 ```bash
-composer require lalalili/course-core:^0.1
+composer require lalalili/course-core:^0.4
+```
+
+The current aitehub host pins `dev-main as 0.4.1` while the package stabilizes its 0.4 line.
+
+## Tests
+
+From the package directory:
+
+```bash
+./vendor/bin/pest
 ```
