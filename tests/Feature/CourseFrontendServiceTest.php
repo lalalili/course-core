@@ -31,6 +31,11 @@ function frontendCourseModel(): string
             return $query->where('status', '>=', 1);
         }
 
+        public function scopeCourses(Builder $query): Builder
+        {
+            return $query->where('type', 'course');
+        }
+
         public function category(): BelongsTo
         {
             return $this->belongsTo(frontendCategoryModel(), 'course_category_id');
@@ -94,6 +99,7 @@ beforeEach(function (): void {
         $table->id();
         $table->unsignedBigInteger('course_category_id')->nullable();
         $table->string('title');
+        $table->string('type')->default('course');
         $table->tinyInteger('status')->default(1);
         $table->timestamp('created_at')->nullable();
     });
@@ -172,6 +178,7 @@ it('returns paginated valid courses and all valid categories', function (): void
     $catClass::create(['name' => 'Hidden', 'is_active' => 0, 'sort' => 2]);
 
     $courseClass::create(['title' => 'Laravel', 'status' => 1]);
+    $courseClass::create(['title' => 'Audio Book', 'type' => 'audio_book', 'status' => 1]);
     $courseClass::create(['title' => 'Draft', 'status' => 0]);
 
     $service = new CourseFrontendService(new NullCourseSearch);

@@ -94,7 +94,7 @@ class CourseFrontendService
         $courseClass = $this->courseModelClass();
         $categoryClass = $this->categoryModelClass();
 
-        $courses = $this->applyValidScope($courseClass::query())
+        $courses = $this->applyCourseListingScope($this->applyValidScope($courseClass::query()))
             ->with(['teacher', 'product', 'category', 'media'])
             ->paginate($perPage);
 
@@ -120,7 +120,7 @@ class CourseFrontendService
 
         $category = $categoryClass::query()->findOrFail($categoryId);
 
-        $courses = $this->applyValidScope($courseClass::query())
+        $courses = $this->applyCourseListingScope($this->applyValidScope($courseClass::query()))
             ->whereHas('category', fn ($q) => $q->where('id', $categoryId))
             ->with(['teacher', 'product', 'category', 'media'])
             ->latest()
@@ -128,7 +128,7 @@ class CourseFrontendService
 
         $menuBarCategories = $categoryClass::query()
             ->where(function ($q) use ($categoryId): void {
-                $q->whereHas('courses', fn ($inner) => $this->applyValidScope($inner))
+                $q->whereHas('courses', fn ($inner) => $this->applyCourseListingScope($this->applyValidScope($inner)))
                     ->orWhere('id', $categoryId);
             })
             ->orderBy('sort')
@@ -479,6 +479,21 @@ class CourseFrontendService
 
         if (method_exists($model, 'scopeValid')) {
             $model->callNamedScope('valid', [$query]);
+        }
+
+        return $query;
+    }
+
+    /**
+     * @param  Builder<Model>  $query
+     * @return Builder<Model>
+     */
+    private function applyCourseListingScope(Builder $query): Builder
+    {
+        $model = $query->getModel();
+
+        if (method_exists($model, 'scopeCourses')) {
+            $model->callNamedScope('courses', [$query]);
         }
 
         return $query;
