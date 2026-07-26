@@ -1,0 +1,13 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  ci:
+    uses: lalalili/.github/.github/workflows/php-package-ci.yml@main
+    secrets: inherit
+    with:
+      php-versions: "['8.2','8.3','8.4']"
+      laravel-versions: "['12.*','13.*']"
+      matrix-exclude: '[{"php":"8.2","laravel":"13.*"}]'
+      run-analyse: false
