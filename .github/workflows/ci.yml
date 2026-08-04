@@ -8,6 +8,6 @@ jobs:
     secrets: inherit
     with:
       php-versions: "['8.4']"
-      laravel-versions: "['12.*','13.*']"
+      laravel-versions: "['13.*']"
       run-analyse: true
       run-format: true
