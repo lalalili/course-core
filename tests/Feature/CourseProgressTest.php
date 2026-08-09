@@ -23,7 +23,8 @@ use Lalalili\CourseCore\Support\NullCourseSearch;
 
 function pgCourseModel(): string
 {
-    return get_class(new class () extends Model {
+    return get_class(new class extends Model
+    {
         protected $table = 'pg_courses';
 
         protected $guarded = [];
@@ -45,7 +46,8 @@ function pgCourseModel(): string
 
 function pgChapterModel(): string
 {
-    return get_class(new class () extends Model {
+    return get_class(new class extends Model
+    {
         protected $table = 'pg_chapters';
 
         protected $guarded = [];
@@ -61,7 +63,8 @@ function pgChapterModel(): string
 
 function pgUnitModel(): string
 {
-    return get_class(new class () extends Model {
+    return get_class(new class extends Model
+    {
         protected $table = 'pg_chapters';
 
         protected $guarded = [];
@@ -77,7 +80,8 @@ function pgUnitModel(): string
 
 function pgHistoryModel(): string
 {
-    return get_class(new class () extends Model {
+    return get_class(new class extends Model
+    {
         protected $table = 'pg_histories';
 
         protected $guarded = [];
@@ -92,10 +96,9 @@ function pgHistoryModel(): string
 
 function pgUser(int $id = 1): Authenticatable
 {
-    return new class ($id) implements Authenticatable {
-        public function __construct(protected int $id)
-        {
-        }
+    return new class($id) implements Authenticatable
+    {
+        public function __construct(protected int $id) {}
 
         public function getAuthIdentifierName(): string
         {
@@ -122,9 +125,7 @@ function pgUser(int $id = 1): Authenticatable
             return '';
         }
 
-        public function setRememberToken($value): void
-        {
-        }
+        public function setRememberToken($value): void {}
 
         public function getRememberTokenName(): string
         {
@@ -135,7 +136,8 @@ function pgUser(int $id = 1): Authenticatable
 
 function pgAllowAccess(): CourseAccessResolver
 {
-    return new class () implements CourseAccessResolver {
+    return new class implements CourseAccessResolver
+    {
         public function canViewCourse(?Authenticatable $user, Model $course): bool
         {
             return true;
@@ -155,7 +157,8 @@ function pgAllowAccess(): CourseAccessResolver
 
 function pgDenyAccess(): CourseAccessResolver
 {
-    return new class () implements CourseAccessResolver {
+    return new class implements CourseAccessResolver
+    {
         public function canViewCourse(?Authenticatable $user, Model $course): bool
         {
             return false;
@@ -175,10 +178,9 @@ function pgDenyAccess(): CourseAccessResolver
 
 function pgVideoResolver(): CourseUnitVideoResolver
 {
-    return new class () extends CourseUnitVideoResolver {
-        public function __construct()
-        {
-        }
+    return new class extends CourseUnitVideoResolver
+    {
+        public function __construct() {}
 
         public function resolve(?Model $unit): CourseUnitVideoPayload
         {
@@ -194,8 +196,8 @@ function pgVideoResolver(): CourseUnitVideoResolver
 function pgService(?CourseAccessResolver $access = null): CourseFrontendService
 {
     return new CourseFrontendService(
-        search: new NullCourseSearch(),
-        accessResolver: $access ?? new NullCourseAccessResolver(),
+        search: new NullCourseSearch,
+        accessResolver: $access ?? new NullCourseAccessResolver,
         videoResolver: pgVideoResolver(),
     );
 }
@@ -241,7 +243,7 @@ beforeEach(function (): void {
 // ---------------------------------------------------------------------------
 
 it('sync creates a new history record', function (): void {
-    $service = new CourseProgressService();
+    $service = new CourseProgressService;
     $service->sync(
         userId: 1,
         courseId: 10,
@@ -259,7 +261,7 @@ it('sync creates a new history record', function (): void {
 });
 
 it('sync updates an existing record', function (): void {
-    $service = new CourseProgressService();
+    $service = new CourseProgressService;
     $service->sync(userId: 1, courseId: 10, chapterId: 2, unitId: 3, progress: 30.0, lastWatchedAt: null, completed: false);
     $service->sync(userId: 1, courseId: 10, chapterId: 2, unitId: 3, progress: 80.0, lastWatchedAt: null, completed: true);
 
@@ -268,7 +270,7 @@ it('sync updates an existing record', function (): void {
 });
 
 it('sync does not regress completed status to false', function (): void {
-    $service = new CourseProgressService();
+    $service = new CourseProgressService;
     $service->sync(userId: 1, courseId: 10, chapterId: 2, unitId: 3, progress: 100.0, lastWatchedAt: null, completed: true);
     $service->sync(userId: 1, courseId: 10, chapterId: 2, unitId: 3, progress: 50.0, lastWatchedAt: null, completed: false);
 
@@ -280,17 +282,17 @@ it('sync does not regress completed status to false', function (): void {
 // ---------------------------------------------------------------------------
 
 it('fetch returns null when no record exists', function (): void {
-    $service = new CourseProgressService();
+    $service = new CourseProgressService;
     expect($service->fetch(1, 10, 2, 3))->toBeNull();
 });
 
 it('fetch returns the existing record', function (): void {
     pgHistoryModel()::create([
-        'user_id'  => 1, 'course_id' => 10, 'chapter_id' => 2, 'unit_id' => 3,
+        'user_id' => 1, 'course_id' => 10, 'chapter_id' => 2, 'unit_id' => 3,
         'progress' => 42.0, 'completed' => false,
     ]);
 
-    $service = new CourseProgressService();
+    $service = new CourseProgressService;
     $record = $service->fetch(1, 10, 2, 3);
 
     expect($record)->not->toBeNull()
